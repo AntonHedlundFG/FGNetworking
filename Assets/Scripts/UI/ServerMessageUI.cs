@@ -4,6 +4,7 @@ using System.ComponentModel;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
+using WebSocketSharp;
 
 public class ServerMessageUI : NetworkBehaviour
 {
@@ -29,7 +30,7 @@ public class ServerMessageUI : NetworkBehaviour
 
     public void DisplayMessage(string message, float duration)
     {
-        if (!IsServer) return;
+        if (!IsServer || message == "") return;
         DisplayMessageClientRpc(message, duration);
     }
 

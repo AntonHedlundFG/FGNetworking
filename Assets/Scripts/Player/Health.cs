@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -31,6 +32,22 @@ public class Health : NetworkBehaviour
         
         damage = Mathf.Abs(damage);
         currentHealth.Value -= damage;
+
+        if (currentHealth.Value <= 0)
+        {
+            PlayerDeath();
+        }
+    }
+
+    private void PlayerDeath()
+    {
+        UserData userData = SavedClientInformationManager.GetUserData(OwnerClientId);
+        if (ServerMessageUI.Instance)
+        {
+            ServerMessageUI.Instance.DisplayMessage(userData.userName + " is dead!", 3.0f);
+        }
+        
+        GetComponent<NetworkObject>()?.Despawn();
     }
 
     public void HealDamage(int heal)
