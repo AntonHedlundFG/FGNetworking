@@ -17,8 +17,7 @@ public class SavingUserNameUI : MonoBehaviour
         GoToScene();
         }else{
         String userName = PlayerPrefs.GetString("userName");
-        if (userName.Trim().Equals(String.Empty)) return;
-        GoToScene();
+        userNameField.text = userName;
         }
 
     }
