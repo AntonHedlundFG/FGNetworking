@@ -3,4 +3,10 @@ This is a collection of assignments, implemented within a rudimentary game proto
 
 ## Task 1. Overhead Names (1pt)
 A locally managed TextMesh which [displays players' usernames](Assets/Scripts/Player/UserNameDisplay.cs) above their ships. The name displayed is assigned by the server using a NetworkVariable<FixedString64Bytes>.
+
 ![OverheadNames](Pics/OverheadNames.png)
+
+## Task 2. Health Packs (1pt)
+A pre-placed, non-respawnable [health pack](Assets/Scripts/Mines/HealthPack.cs), with a server-managed trigger that [restores HP](Assets/Scripts/Player/Health.cs#L26-L30). 
+
+![Health Packs](Pics/HealthPack.gif)
