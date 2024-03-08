@@ -7,7 +7,7 @@ A locally managed TextMesh which [displays players' usernames](Assets/Scripts/Pl
 ![OverheadNames](Pics/OverheadNames.png)
 
 ## Task 2. Health Packs (1pt)
-A pre-placed, non-respawnable [health pack](Assets/Scripts/Mines/HealthPack.cs), with a server-managed trigger that [restores HP](Assets/Scripts/Player/Health.cs#L26-L30). 
+A pre-placed, non-respawnable [health pack](Assets/Scripts/Mines/HealthPack.cs), with a server-managed trigger that [restores HP](Assets/Scripts/Player/Health.cs#L53-L63). 
 
 ![Health Packs](Pics/HealthPack.gif)
 
@@ -31,3 +31,8 @@ I also added a [ServerMessageUI](Assets/Scripts/UI/ServerMessageUI.cs) object, w
 I also added Server UI broadcast messages for picking up shields and health packs.
 
 ![Shield Packs](Pics/ShieldPack.gif)
+
+## Task 9. Player Death (1pt)
+A [simple check](Assets/Scripts/Player/Health.cs#L36-L50) when taking damage to see if health is 0 or lower. When it is, trigger PlayerDeath which despawns the object and broadcasts a UI message.
+
+![Player Death](Pics/ClientDeath.gif)
