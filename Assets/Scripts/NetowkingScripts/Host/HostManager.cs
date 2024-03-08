@@ -62,4 +62,9 @@ public async void PingServer(){
     Debug.Log("Pinging Self");
 }
 
+    public void KickPlayer(ulong networkID, string reason)
+    {
+        NetworkManager.Singleton.DisconnectClient(networkID, reason);
+    }
+
 }

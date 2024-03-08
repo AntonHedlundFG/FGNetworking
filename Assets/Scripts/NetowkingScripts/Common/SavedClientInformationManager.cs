@@ -67,6 +67,7 @@ public static class SavedClientInformationManager
             if (networkID == client.networkID)
             {
                 savedClientInformation.Remove(client);
+                return;
             }
 
         }

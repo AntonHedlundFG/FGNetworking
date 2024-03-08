@@ -57,4 +57,9 @@ public class ServerManager : ScriptableObject, IDisposable
         multiplayAllocationService?.Dispose();
         networkServer?.Dispose();
     }
+
+    public void KickPlayer(ulong networkID, string reason)
+    {
+        networkManager.DisconnectClient(networkID, reason);
+    }
 }

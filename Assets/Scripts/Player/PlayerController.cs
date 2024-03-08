@@ -24,9 +24,25 @@ public class PlayerController : NetworkBehaviour, IPlayerActions
     [SerializeField] private float shipRotationSpeed = 100f;
     [SerializeField] private float turretRotationSpeed = 4f;
 
+    // -- CHEATING --
+    [Header("Cheating")]
+    [SerializeField][Range(1.0f, 5.0f)] private float _positionCheatingAcceptance = 1.3f; // Accepts movements at 1.1 times the movement speed to avoid false positives for cheating protection.
+    [SerializeField][Range(1.0f, 5.0f)] private float _cheatTeleportDistance = 3.0f; //Determines teleport distance for cheating input (Space bar) 
+    [SerializeField][Range(0.5f, 2.0f)] private float _acceptableLagDuration = 0.5f;
+    private float _lastKnownPositionTime;
+    private Vector3 _lastKnownPosition;
+    private bool _bShouldPerformCheatTeleport = false;
+    // --------------
 
     public override void OnNetworkSpawn()
     {
+        if (IsServer)
+        {
+            //Initialize cheating detection variables
+            _lastKnownPosition = transform.position;
+            _lastKnownPositionTime = Time.time;
+        }
+
         if (!IsOwner) return;
 
         if (_playerInput == null)
@@ -41,10 +57,6 @@ public class PlayerController : NetworkBehaviour, IPlayerActions
         turretPivotTransform = transform.Find("PivotTurret");
         if (turretPivotTransform == null) Debug.LogError("PivotTurret is not found", gameObject);
     }
-
-
-
-
 
     public void OnFire(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
@@ -65,9 +77,18 @@ public class PlayerController : NetworkBehaviour, IPlayerActions
 
     private void FixedUpdate()
     {
+        if (IsServer)
+            TeleportingCheatDetection();
+
         if (!IsOwner) return;
         _rb.velocity = transform.up * _moveInput.y * movementSpeed;
         _rb.MoveRotation(_rb.rotation + _moveInput.x * -shipRotationSpeed * Time.fixedDeltaTime);
+
+        if (_bShouldPerformCheatTeleport)
+        {
+            transform.position += transform.up * _cheatTeleportDistance;
+            _bShouldPerformCheatTeleport = false;
+        }
     }
     private void LateUpdate()
     {
@@ -83,12 +104,60 @@ public class PlayerController : NetworkBehaviour, IPlayerActions
         _cursorLocation = context.ReadValue<Vector2>();
     }
 
-    [SerializeField][Range(1.0f, 5.0f)] private float _cheatTeleportDistance = 2.0f;
+    // When pressing Space bar, the user cheats by teleporting forward a short distance.
     public void OnCheatTeleport(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if (!context.started) return;
-        transform.position += transform.up * _cheatTeleportDistance;
-        Debug.Log("Teleporting");
+        if (context.started)
+            _bShouldPerformCheatTeleport = true;
+    }
+
+
+    private void TeleportingCheatDetection()
+    {
+        float travelTime = Time.time - _lastKnownPositionTime;
+        float travelLength = (_lastKnownPosition - transform.position).magnitude;
+
+        if (_lastKnownPosition == transform.position) // We have not received a new position from the client.
+        {
+            //We might still be waiting for the transform to replicate from client. If we've waited long enough, we move through and update last known position and time.
+            if (travelTime < _acceptableLagDuration) return;
+        }
+        else
+        {
+            // If the distance travelled since the last update is greater than what the movementSpeed would allow, the user is cheating. 
+            // _positionCheatingAcceptance is slightly higher than 1.0 to avoid false positives.
+            if (travelLength > travelTime * movementSpeed * _positionCheatingAcceptance)
+            {
+                if (IsOwnedByServer)
+                    Debug.Log("The server can cheat if it wants to!");
+                else
+                {
+                    string cheatingReason = "User used teleporting cheat";
+                    HandleCheater(cheatingReason);
+                }
+                
+            } 
+        }
+
+        _lastKnownPosition = transform.position;
+        _lastKnownPositionTime = Time.time;
+    }
+
+    private void HandleCheater(string cheatingReason)
+    {
+        
+        ServerSingelton server = ServerSingelton.GetInstance();
+        if (server && server.serverManager)
+        {
+            server.serverManager.KickPlayer(OwnerClientId, cheatingReason);
+            return;
+        }
+        HostSingelton host = HostSingelton.GetInstance();
+        if (host)
+        {
+            host.hostManager.KickPlayer(OwnerClientId, cheatingReason);
+        }
+        
     }
 
 }

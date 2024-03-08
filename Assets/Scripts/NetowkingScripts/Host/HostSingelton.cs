@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class HostSingelton : Singleton<HostSingelton>
 {
-  HostManager hostManager;
+  public HostManager hostManager;
 
 
   public async Task<bool> InitSeverAsync()

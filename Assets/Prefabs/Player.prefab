@@ -78,6 +78,9 @@ MonoBehaviour:
   movementSpeed: 5
   shipRotationSpeed: 100
   turretRotationSpeed: 4
+  _positionCheatingAcceptance: 1.5
+  _cheatTeleportDistance: 3
+  _acceptableLagDuration: 0.5
 --- !u!212 &214913618731102450
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -204,6 +207,7 @@ MonoBehaviour:
   clientSingleBulletPrefab: {fileID: 6137059209113163129, guid: eb95cbada454d9c4c8bd843bb9424b33, type: 3}
   serverSingleBulletPrefab: {fileID: 2699881094025181072, guid: 5a0f856cf7b9d3c4abbaba622df545d5, type: 3}
   bulletSpawnPoint: {fileID: 662702000496822912}
+  _shootingCooldownSeconds: 1
 --- !u!114 &1795185787946825641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,6 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1849a46e410f3134c88de7b66144d174, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _maxHealth: 100
   currentHealth:
     m_InternalValue: 100
 --- !u!70 &117897365439605971
