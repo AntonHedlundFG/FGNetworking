@@ -78,7 +78,7 @@ MonoBehaviour:
   movementSpeed: 5
   shipRotationSpeed: 100
   turretRotationSpeed: 4
-  _positionCheatingAcceptance: 1.5
+  _positionCheatingAcceptance: 2
   _cheatTeleportDistance: 3
   _acceptableLagDuration: 0.5
 --- !u!212 &214913618731102450

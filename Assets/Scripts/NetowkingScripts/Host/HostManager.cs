@@ -65,6 +65,10 @@ public async void PingServer(){
     public void KickPlayer(ulong networkID, string reason)
     {
         NetworkManager.Singleton.DisconnectClient(networkID, reason);
+        if (ServerMessageUI.Instance)
+        {
+            ServerMessageUI.Instance.DisplayMessage(reason, 5.0f);
+        }
     }
 
 }

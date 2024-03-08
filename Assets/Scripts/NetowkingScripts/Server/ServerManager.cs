@@ -61,5 +61,9 @@ public class ServerManager : ScriptableObject, IDisposable
     public void KickPlayer(ulong networkID, string reason)
     {
         networkManager.DisconnectClient(networkID, reason);
+        if (ServerMessageUI.Instance)
+        {
+            ServerMessageUI.Instance.DisplayMessage(reason, 5.0f);
+        }
     }
 }

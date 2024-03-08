@@ -129,10 +129,14 @@ public class PlayerController : NetworkBehaviour, IPlayerActions
             if (travelLength > travelTime * movementSpeed * _positionCheatingAcceptance)
             {
                 if (IsOwnedByServer)
-                    Debug.Log("The server can cheat if it wants to!");
+                {
+                    if (ServerMessageUI.Instance)
+                        ServerMessageUI.Instance.DisplayMessage("The server just cheated! Life is unfair", 3.0f);
+                }
                 else
                 {
-                    string cheatingReason = "User used teleporting cheat";
+                    UserData userData = SavedClientInformationManager.GetUserData(OwnerClientId);
+                    string cheatingReason = userData.userName + " was kicked for using teleport cheat";
                     HandleCheater(cheatingReason);
                 }
                 
