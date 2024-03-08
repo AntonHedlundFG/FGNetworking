@@ -10,3 +10,8 @@ A locally managed TextMesh which [displays players' usernames](Assets/Scripts/Pl
 A pre-placed, non-respawnable [health pack](Assets/Scripts/Mines/HealthPack.cs), with a server-managed trigger that [restores HP](Assets/Scripts/Player/Health.cs#L26-L30). 
 
 ![Health Packs](Pics/HealthPack.gif)
+
+## Task 5. Shot Timer (1pt)
+A shot cooldown managed by server. 
+
+The previous solution allowed the client to make shooting RPC's to the server at any desired speed. [My new solution](Assets/Scripts/Player/FiringAction.cs) uses an _isShooting bool, managed by the owning client, which the server reads to fire actual bullets. The owning client makes local predictive shots, but it is the server's cooldown timer that determines actual outcomes.
