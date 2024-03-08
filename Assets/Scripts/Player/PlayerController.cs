@@ -83,4 +83,12 @@ public class PlayerController : NetworkBehaviour, IPlayerActions
         _cursorLocation = context.ReadValue<Vector2>();
     }
 
+    [SerializeField][Range(1.0f, 5.0f)] private float _cheatTeleportDistance = 2.0f;
+    public void OnCheatTeleport(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        if (!context.started) return;
+        transform.position += transform.up * _cheatTeleportDistance;
+        Debug.Log("Teleporting");
+    }
+
 }
