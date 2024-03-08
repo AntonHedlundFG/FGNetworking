@@ -1,5 +1,5 @@
-# Assignment Collection, Network Programming Course - Anton Hedlund
-This is a collection of assignments, implemented within a rudimentary game prototype for a network programming course at FutureGames. There are 14 various tasks, not all need to be implemented. I will only list the ones I have solved.
+# Assignments, Network Programming Course - Anton Hedlund
+This is a collection of assignments, implemented within a rudimentary game prototype for a network programming course at FutureGames. There are 14 various tasks, not all need to be implemented. I will only list the ones I chose to solve for a VG result (10pts)
 
 ## Task 1. Overhead Names (1pt)
 A locally managed TextMesh which [displays players' usernames](Assets/Scripts/Player/UserNameDisplay.cs) above their ships. The name displayed is assigned by the server using a NetworkVariable<FixedString64Bytes>.
@@ -24,3 +24,10 @@ Since movement is client authoritative, this task implements cheating protection
 This [cheating protection](Assets/Scripts/Player/PlayerController.cs#L115-L148) is implemented by letting the server keep track of the last known change in the player's position, as well as the time when that change happened. Whenever the clients sends a new position, the server makes sure the distance between the old and new position is travelable by using regular movement in that time. When a client is caught cheating, we kick them from the serverManager or hostManager.
 
 I also added a [ServerMessageUI](Assets/Scripts/UI/ServerMessageUI.cs) object, where the server can push messages to be queued for display for all players. 
+
+## Task 8. Shield Power-Up (2pts)
+[A pick-up](Assets/Scripts/Mines/ShieldPack.cs) which gives [protection](Assets/Scripts/Player/Health.cs#L26-L31) from 2 hits, regardless of damage. Server-authoritative, with a sprite that turns on/off locally depending on remaining shield charges.
+
+I also added Server UI broadcast messages for picking up shields and health packs.
+
+![Shield Packs](Pics/ShieldPack.gif)
